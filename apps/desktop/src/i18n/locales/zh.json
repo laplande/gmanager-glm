@@ -1,0 +1,125 @@
+{
+  "app": {
+    "name": "GManager",
+    "loading": "加载中...",
+    "desktop": "GManager 桌面版"
+  },
+  "auth": {
+    "welcomeBack": "欢迎回来",
+    "createMasterPassword": "创建主密码",
+    "unlockDescription": "输入您的主密码以解锁保险库",
+    "createDescription": "创建一个强密码来保护您的账户",
+    "masterPassword": "主密码",
+    "confirmPassword": "确认密码",
+    "unlockPlaceholder": "请输入主密码",
+    "createPlaceholder": "请创建主密码",
+    "confirmPlaceholder": "请再次输入主密码",
+    "unlockVault": "解锁保险库",
+    "createVault": "创建保险库",
+    "unlocking": "解锁中...",
+    "creating": "创建中...",
+    "important": "重要提示",
+    "passwordWarning": "您的主密码无法恢复。如果忘记密码，您将无法访问所有存储的账户。",
+    "encryptionInfo": "您的数据使用 AES-256-GCM 加密",
+    "derivationInfo": "密钥通过 PBKDF2 派生（100,000 次迭代）",
+    "errors": {
+      "passwordRequired": "请输入密码",
+      "confirmRequired": "请确认密码",
+      "passwordMismatch": "两次输入的密码不一致",
+      "passwordTooShort": "密码至少需要 8 个字符"
+    }
+  },
+  "account": {
+    "singular": "账户",
+    "plural": "账户",
+    "email": "邮箱",
+    "password": "密码",
+    "totp": "双因素认证码",
+    "recoveryEmail": "恢复邮箱",
+    "group": "分组",
+    "tags": "标签",
+    "noAccounts": "未找到账户",
+    "noAccountsYet": "暂无账户。导入您的第一个账户以开始使用。",
+    "loadingAccounts": "加载账户中...",
+    "selected": "已选择 {{count}} 个账户",
+    "selected_plural": "已选择 {{count}} 个账户",
+    "clearSelection": "清除选择",
+    "deleteConfirm": "删除 {{count}} 个账户？"
+  },
+  "import": {
+    "noAccountsToPreview": "没有可预览的账户",
+    "noAccountsToPreviewDescription": "请先解析一些账户数据，以便在导入前预览。",
+    "loadingPreview": "加载预览中...",
+    "total": "总计",
+    "valid": "有效",
+    "invalid": "无效",
+    "confidence": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "columnLabels": {
+      "email": "邮箱",
+      "password": "密码",
+      "recovery": "恢复邮箱",
+      "totp": "双因素认证",
+      "year": "年份",
+      "country": "国家",
+      "unknown": "未知字段"
+    },
+    "actions": {
+      "deleteRow": "删除行",
+      "deleteSelected": "删除选中",
+      "clearSelection": "清除选择",
+      "cancel": "取消",
+      "import": "导入 {{count}} 个账户",
+      "import_plural": "导入 {{count}} 个账户"
+    },
+    "stats": {
+      "selected": "已选择 {{count}} 行",
+      "selected_plural": "已选择 {{count}} 行"
+    }
+  },
+  "search": {
+    "placeholder": "搜索账户...",
+    "clear": "清除搜索",
+    "filterBy": "按{{field}}筛选",
+    "allGroups": "所有分组",
+    "allTags": "所有标签",
+    "all": "所有{{field}}",
+    "recentSearches": "最近搜索",
+    "loadingResults": "加载搜索结果中",
+    "group": "分组",
+    "tag": "标签"
+  },
+  "language": {
+    "title": "语言",
+    "en": "English",
+    "zh": "中文"
+  },
+  "common": {
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "save": "保存",
+    "close": "关闭",
+    "copy": "复制",
+    "copied": "已复制！",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息",
+    "selectAll": "全选"
+  },
+  "vault": {
+    "unlocked": "保险库解锁成功",
+    "locked": "保险库已锁定"
+  },
+  "actions": {
+    "importAccounts": "导入账户",
+    "addAccount": "添加账户",
+    "settings": "设置"
+  }
+}

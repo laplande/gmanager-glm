@@ -1,0 +1,23 @@
+{
+  "name": "@gmanager/crypto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Web-compatible encryption utilities for GManager",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "@gmanager/shared": "workspace:*"
+  }
+}

@@ -1,0 +1,6 @@
+# GManager Monorepo Workspace
+# Defines workspace package locations for pnpm
+
+packages:
+  - 'packages/*'
+  - 'apps/*'

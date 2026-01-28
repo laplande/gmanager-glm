@@ -1,0 +1,125 @@
+{
+  "app": {
+    "name": "GManager",
+    "loading": "Loading...",
+    "desktop": "GManager Desktop"
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "createMasterPassword": "Create Master Password",
+    "unlockDescription": "Enter your master password to unlock your vault",
+    "createDescription": "Create a strong master password to secure your accounts",
+    "masterPassword": "Master Password",
+    "confirmPassword": "Confirm Password",
+    "unlockPlaceholder": "Enter your master password",
+    "createPlaceholder": "Create a master password",
+    "confirmPlaceholder": "Confirm your master password",
+    "unlockVault": "Unlock Vault",
+    "createVault": "Create Vault",
+    "unlocking": "Unlocking...",
+    "creating": "Creating...",
+    "important": "Important",
+    "passwordWarning": "Your master password cannot be recovered. If you forget it, you will lose access to all your stored accounts.",
+    "encryptionInfo": "Your data is encrypted with AES-256-GCM",
+    "derivationInfo": "Keys derived with PBKDF2 (100,000 iterations)",
+    "errors": {
+      "passwordRequired": "Please enter a password",
+      "confirmRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters"
+    }
+  },
+  "account": {
+    "singular": "account",
+    "plural": "accounts",
+    "email": "Email",
+    "password": "Password",
+    "totp": "2FA Code",
+    "recoveryEmail": "Recovery Email",
+    "group": "Group",
+    "tags": "Tags",
+    "noAccounts": "No accounts found",
+    "noAccountsYet": "No accounts yet. Import your first account to get started.",
+    "loadingAccounts": "Loading accounts...",
+    "selected": "{{count}} account selected",
+    "selected_plural": "{{count}} accounts selected",
+    "clearSelection": "Clear selection",
+    "deleteConfirm": "Delete {{count}} account(s)?"
+  },
+  "import": {
+    "noAccountsToPreview": "No accounts to preview",
+    "noAccountsToPreviewDescription": "Parse some account data first to see a preview before importing.",
+    "loadingPreview": "Loading preview...",
+    "total": "Total",
+    "valid": "Valid",
+    "invalid": "Invalid",
+    "confidence": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "columnLabels": {
+      "email": "Email",
+      "password": "Password",
+      "recovery": "Recovery",
+      "totp": "TOTP",
+      "year": "Year",
+      "country": "Country",
+      "unknown": "Unknown Fields"
+    },
+    "actions": {
+      "deleteRow": "Delete row",
+      "deleteSelected": "Delete Selected",
+      "clearSelection": "Clear Selection",
+      "cancel": "Cancel",
+      "import": "Import {{count}} Account",
+      "import_plural": "Import {{count}} Accounts"
+    },
+    "stats": {
+      "selected": "{{count}} row selected",
+      "selected_plural": "{{count}} rows selected"
+    }
+  },
+  "search": {
+    "placeholder": "Search accounts...",
+    "clear": "Clear search",
+    "filterBy": "Filter by {{field}}",
+    "allGroups": "All Groups",
+    "allTags": "All Tags",
+    "all": "All {{field}}",
+    "recentSearches": "Recent Searches",
+    "loadingResults": "Loading search results",
+    "group": "Group",
+    "tag": "Tag"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "zh": "中文"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "selectAll": "Select all"
+  },
+  "vault": {
+    "unlocked": "Vault unlocked successfully",
+    "locked": "Vault is locked"
+  },
+  "actions": {
+    "importAccounts": "Import Accounts",
+    "addAccount": "Add Account",
+    "settings": "Settings"
+  }
+}

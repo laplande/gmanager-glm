@@ -1,0 +1,36 @@
+{
+  "name": "@gmanager/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "GManager Desktop Application - Tauri-based desktop client",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "tauri": "tauri",
+    "test": "vitest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@gmanager/crypto": "workspace:*",
+    "@gmanager/parser": "workspace:*",
+    "@gmanager/shared": "workspace:*",
+    "@gmanager/ui": "workspace:*",
+    "@tauri-apps/api": "^2.1.0",
+    "@tauri-apps/plugin-shell": "^2.0.0",
+    "i18next": "^25.8.0",
+    "lucide-react": "^0.563.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^16.5.3",
+    "zustand": "^5.0.10"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.1.0",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  gmanager-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gmanager-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - gmanager-data:/app/data
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - gmanager-network
+
+volumes:
+  gmanager-data:
+    driver: local
+
+networks:
+  gmanager-network:
+    driver: bridge

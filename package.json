@@ -1,0 +1,29 @@
+{
+  "name": "gmanager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GManager - GLM Account Management System",
+  "scripts": {
+    "dev": "pnpm --filter './apps/**' dev",
+    "build": "pnpm --filter './packages/**' build && pnpm --filter './apps/**' build",
+    "test": "pnpm --filter './packages/**' test && pnpm --filter './apps/**' test",
+    "lint": "pnpm --filter './packages/**' lint && pnpm --filter './apps/**' lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "rm -rf node_modules **/node_modules **/dist **/.turbo"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
