@@ -10,7 +10,7 @@
 // - 128-bit nonce provides sufficient randomness for field-level encryption
 
 use ring::aead;
-use ring::aead::{AES_256_GCM, BoundKey, Nonce, OpeningKey, SealingKey, UnboundKey};
+use ring::aead::{Aad, AES_256_GCM, LessSafeKey, Nonce, UnboundKey};
 use ring::pbkdf2;
 use ring::rand::{SecureRandom, SystemRandom};
 
@@ -193,7 +193,7 @@ pub fn encrypt_field(plaintext: &str, key: &[u8; KEY_SIZE]) -> Result<String> {
     // Create the encryption key from the raw key bytes
     let unbound_key = UnboundKey::new(&AES_256_GCM, key)
         .expect("key is valid size");
-    let sealing_key = SealingKey::new(unbound_key);
+    let sealing_key = LessSafeKey::new(unbound_key);
 
     // Convert plaintext to bytes
     let plaintext_bytes = plaintext.as_bytes();
@@ -205,10 +205,13 @@ pub fn encrypt_field(plaintext: &str, key: &[u8; KEY_SIZE]) -> Result<String> {
     // Copy nonce to the beginning
     encrypted_data[..NONCE_SIZE].copy_from_slice(&nonce);
 
+    // Copy plaintext after nonce
+    encrypted_data[NONCE_SIZE..NONCE_SIZE + plaintext_bytes.len()].copy_from_slice(plaintext_bytes);
+
     // Encrypt in-place (ciphertext overwrites plaintext portion)
     let nonce = Nonce::assume_unique_for_key(nonce);
-    sealing_key
-        .seal_in_place_append_tag(nonce, aead::Aad::empty(), &mut encrypted_data[NONCE_SIZE..])
+    let tag_len = sealing_key
+        .seal_in_place_append_tag(nonce, Aad::empty(), &mut encrypted_data[NONCE_SIZE..])
         .map_err(|e| CryptoError::DecryptionFailed(e.to_string()))?;
 
     // Encode with version prefix and base64
@@ -264,12 +267,12 @@ pub fn decrypt_field(encrypted: &str, key: &[u8; KEY_SIZE]) -> Result<String> {
     // Create decryption key
     let unbound_key = UnboundKey::new(&AES_256_GCM, key)
         .expect("key is valid size");
-    let opening_key = OpeningKey::new(unbound_key);
+    let opening_key = LessSafeKey::new(unbound_key);
 
     // Decrypt and verify in-place
     let mut decrypted_bytes = ciphertext_with_tag.to_vec();
     let plaintext_len = opening_key
-        .open_in_place(nonce, aead::Aad::empty(), &mut decrypted_bytes)
+        .open_in_place(nonce, Aad::empty(), &mut decrypted_bytes)
         .map_err(|e| CryptoError::DecryptionFailed(e.to_string()))?
         .len();
 
