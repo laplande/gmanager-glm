@@ -96,7 +96,7 @@ pub struct BatchDeleteRequest {
 #[derive(Debug, Clone, serde::Deserialize)]
 pub struct BatchUpdateRequest {
     pub ids: Vec<String>,
-    pub updates: AccountUpdatePayload,
+    pub updates: UpdateAccountPayload,
 }
 
 // ============================================================================

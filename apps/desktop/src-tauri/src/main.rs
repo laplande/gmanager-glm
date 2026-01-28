@@ -20,7 +20,7 @@ use groups::{
     create_group_command, delete_group_command, get_group_accounts_count_command,
     get_group_command, get_groups_command, update_group_command,
 };
-use std::sync::Mutex;
+use tauri::Manager;
 
 fn main() {
     tauri::Builder::default()

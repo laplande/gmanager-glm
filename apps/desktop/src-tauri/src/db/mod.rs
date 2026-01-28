@@ -7,10 +7,10 @@
 //! - Operation logging for audit trails
 //! - Undo/redo functionality
 
-use rusqlite::{params, Connection, Result as SqliteResult};
+use rusqlite::{params, Connection};
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 
 // ============================================================================
 // Error Types
@@ -585,36 +585,36 @@ impl Database {
         let conn = self.get_conn();
 
         let mut conditions = Vec::new();
-        let mut params: Vec<&dyn rusqlite::ToSql> = Vec::new();
+        let mut params: Vec<Box<dyn rusqlite::ToSql>> = Vec::new();
 
         // Text search across multiple fields
         if let Some(ref query) = search.query {
             if !query.trim().is_empty() {
                 conditions.push("(email LIKE ? OR recovery_email LIKE ? OR notes LIKE ?)");
                 let like_pattern = format!("%{}%", query);
-                params.push(&like_pattern);
-                params.push(&like_pattern);
-                params.push(&like_pattern);
+                params.push(Box::new(like_pattern.clone()));
+                params.push(Box::new(like_pattern.clone()));
+                params.push(Box::new(like_pattern));
             }
         }
 
         // Filter by group
         if let Some(group_id) = search.group_id {
             conditions.push("group_id = ?");
-            params.push(&group_id);
+            params.push(Box::new(group_id));
         }
 
         // Filter by year
         if let Some(year) = search.year {
             conditions.push("year = ?");
-            params.push(&year);
+            params.push(Box::new(year));
         }
 
         // Filter by tag (requires JOIN)
         let with_join = search.tag_id.is_some();
         if let Some(tag_id) = search.tag_id {
             conditions.push("account_tags.tag_id = ?");
-            params.push(&tag_id);
+            params.push(Box::new(tag_id));
         }
 
         let where_clause = if conditions.is_empty() {
@@ -641,13 +641,16 @@ impl Database {
             from_clause, where_clause
         );
 
-        let pag = search.pagination.unwrap_or_default();
-        params.push(&pag.limit);
-        params.push(&pag.offset);
+        let pag = &search.pagination;
+        params.push(Box::new(pag.limit));
+        params.push(Box::new(pag.offset));
+
+        // Convert params to references for query
+        let params_refs: Vec<&dyn rusqlite::ToSql> = params.iter().map(|p| p.as_ref()).collect();
 
         let mut stmt = conn.prepare(&query)?;
 
-        let mut rows = stmt.query(params.as_slice())?;
+        let mut rows = stmt.query(params_refs.as_slice())?;
         let mut accounts = Vec::new();
 
         while let Some(row) = rows.next()? {
@@ -1113,7 +1116,7 @@ impl Database {
             params![days],
         )?;
 
-        Ok(affected)
+        Ok(affected as i64)
     }
 }
 
@@ -1186,7 +1189,7 @@ impl Database {
     pub fn clear_undo_stack(&self) -> DbResult<i64> {
         let conn = self.get_conn();
         let affected = conn.execute("DELETE FROM undo_stack", [])?;
-        Ok(affected)
+        Ok(affected as i64)
     }
 }
 
@@ -1336,11 +1339,10 @@ impl Database {
     pub fn backup(&self, backup_path: &PathBuf) -> DbResult<()> {
         let conn = self.get_conn();
 
-        // Create backup
-        let backup_conn = Connection::open(backup_path)?;
-
-        // Copy schema and data using SQLite backup API
-        conn.backup(rusqlite::DatabaseName::Main, &backup_conn, rusqlite::DatabaseName::Main, None)?;
+        // Use SQLite's VACUUM INTO command for backup
+        let backup_str = backup_path.to_str()
+            .ok_or_else(|| DbError::InvalidInput("Invalid backup path".to_string()))?;
+        conn.execute(&format!("VACUUM INTO '{}'", backup_str.replace("'", "''")), [])?;
 
         Ok(())
     }

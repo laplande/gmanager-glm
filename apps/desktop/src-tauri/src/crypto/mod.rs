@@ -9,12 +9,22 @@
 // - Random nonce for each encryption prevents pattern analysis
 // - 128-bit nonce provides sufficient randomness for field-level encryption
 
-use ring::aead;
 use ring::aead::{Aad, AES_256_GCM, LessSafeKey, Nonce, UnboundKey};
 use ring::pbkdf2;
 use ring::rand::{SecureRandom, SystemRandom};
 
 use std::num::NonZeroU32;
+
+/// Macro for creating array references from slices
+/// Used for nonce conversion
+macro_rules! array_ref {
+    ($slice:expr, $offset:expr, $len:expr) => {{
+        #[allow(unused_unsafe)]
+        unsafe {
+            &*($slice.as_ptr().add($offset) as *const [_; $len])
+        }
+    }};
+}
 
 /// Base64 encoding/decoding for encrypted data
 use base64::{
@@ -198,24 +208,18 @@ pub fn encrypt_field(plaintext: &str, key: &[u8; KEY_SIZE]) -> Result<String> {
     // Convert plaintext to bytes
     let plaintext_bytes = plaintext.as_bytes();
 
-    // Create buffer for encrypted data: nonce + plaintext + tag (16 bytes)
-    // GCM appends the tag to the ciphertext
-    let mut encrypted_data = vec![0u8; NONCE_SIZE + plaintext_bytes.len() + 16];
+    // Create buffer: nonce + plaintext (tag will be appended by ring)
+    let mut out = nonce.to_vec();
+    out.extend_from_slice(plaintext_bytes);
 
-    // Copy nonce to the beginning
-    encrypted_data[..NONCE_SIZE].copy_from_slice(&nonce);
-
-    // Copy plaintext after nonce
-    encrypted_data[NONCE_SIZE..NONCE_SIZE + plaintext_bytes.len()].copy_from_slice(plaintext_bytes);
-
-    // Encrypt in-place (ciphertext overwrites plaintext portion)
+    // Encrypt in-place (tag is appended to out)
     let nonce = Nonce::assume_unique_for_key(nonce);
-    let tag_len = sealing_key
-        .seal_in_place_append_tag(nonce, Aad::empty(), &mut encrypted_data[NONCE_SIZE..])
+    sealing_key
+        .seal_in_place_append_tag(nonce, Aad::empty(), &mut out)
         .map_err(|e| CryptoError::DecryptionFailed(e.to_string()))?;
 
     // Encode with version prefix and base64
-    let encoded = format!("{}{}", ENCRYPTED_PREFIX, BASE64.encode(&encrypted_data));
+    let encoded = format!("{}{}", ENCRYPTED_PREFIX, BASE64.encode(&out));
 
     Ok(encoded)
 }
@@ -506,19 +510,6 @@ fn generate_nonce() -> Result<[u8; NONCE_SIZE]> {
         .map_err(|_| CryptoError::NonceGenerationFailed)?;
 
     Ok(nonce)
-}
-
-/// Macro for creating array references from slices
-/// Used for nonce conversion
-macro_rules! array_ref {
-    ($slice:expr, $offset:expr, $len:expr) => {
-        {
-            #[allow(unused_unsafe)]
-            unsafe {
-                &*($slice.as_ptr().add($offset) as *const [_; $len])
-            }
-        }
-    };
 }
 
 // ============================================================================
