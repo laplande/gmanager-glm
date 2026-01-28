@@ -150,8 +150,8 @@ pub fn get_groups_command(
         .map(db_to_frontend_group)
         .collect::<Vec<_>>()
         .into_iter()
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| e.to_string())
+        .map(Ok)
+        .collect::<Result<Vec<_>, String>>()
 }
 
 /// Get a single group by ID
@@ -192,7 +192,12 @@ pub fn update_group_command(
     db: tauri::State<Database>,
     group: UpdateGroupPayload,
 ) -> Result<(), String> {
-    let (group_id, mut update_data) = frontend_to_db_update(group)
+    // Extract fields before moving group
+    let name = group.name.clone();
+    let color = group.color.clone();
+    let sort_order = group.sort_order;
+
+    let (group_id, _) = frontend_to_db_update(group)
         .map_err(|e| e.to_string())?;
 
     // Get existing group to fill in unchanged fields
@@ -201,9 +206,9 @@ pub fn update_group_command(
 
     // Fill in missing fields with existing values
     let update_payload = CreateGroup {
-        name: group.name.unwrap_or_else(|| existing.name),
-        color: group.color.unwrap_or_else(|| existing.color),
-        sort_order: group.sort_order.unwrap_or(existing.sort_order),
+        name: name.unwrap_or_else(|| existing.name),
+        color: color.unwrap_or_else(|| existing.color),
+        sort_order: sort_order.unwrap_or(existing.sort_order),
     };
 
     db.update_group(group_id, update_payload)

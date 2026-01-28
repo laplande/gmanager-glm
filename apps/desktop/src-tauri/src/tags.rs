@@ -286,7 +286,7 @@ pub fn set_account_tags_command(
         .map_err(|e| e.to_string())?;
 
     // Remove tags that are not in the new list
-    for current_tag in current_tags {
+    for current_tag in &current_tags {
         if !tag_ids.contains(&current_tag.id) {
             db.remove_tag_from_account(account_id, current_tag.id)
                 .map_err(|e| e.to_string())?;

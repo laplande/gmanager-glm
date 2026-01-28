@@ -441,7 +441,9 @@ fn derive_key_from_password(db: &Database, password: &str) -> AuthResult<[u8; 32
 /// 1. Computing SHA-256 of the known plaintext
 /// 2. Encoding with version prefix for future compatibility
 fn generate_verification_hash(key: &[u8; 32]) -> String {
-    let hash = digest::digest(&digest::SHA256, &[key[..], VERIFICATION_PLAINTEXT].concat());
+    let mut data = key.to_vec();
+    data.extend_from_slice(VERIFICATION_PLAINTEXT);
+    let hash = digest::digest(&digest::SHA256, &data);
     let hash_bytes = hash.as_ref();
 
     format!("{}{}", VAULT_VERSION, hex::encode(hash_bytes))
@@ -472,7 +474,9 @@ fn verify_password(key: &[u8; 32], stored_hash: &str) -> bool {
     };
 
     // Compute expected hash
-    let expected_hash = digest::digest(&digest::SHA256, &[key[..], VERIFICATION_PLAINTEXT].concat());
+    let mut data = key.to_vec();
+    data.extend_from_slice(VERIFICATION_PLAINTEXT);
+    let expected_hash = digest::digest(&digest::SHA256, &data);
     let expected_bytes = expected_hash.as_ref();
 
     // Constant-time comparison to prevent timing attacks

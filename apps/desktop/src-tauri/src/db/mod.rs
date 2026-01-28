@@ -235,7 +235,7 @@ impl Database {
     }
 
     /// Get a connection lock for operations
-    fn get_conn(&self) -> std::sync::MutexGuard<Connection> {
+    pub(crate) fn get_conn(&self) -> std::sync::MutexGuard<Connection> {
         self.conn
             .lock()
             .expect("Database connection lock poisoned")
