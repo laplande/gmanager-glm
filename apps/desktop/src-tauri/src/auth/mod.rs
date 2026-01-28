@@ -85,6 +85,10 @@ pub enum AuthError {
     #[error("Crypto error: {0}")]
     Crypto(#[from] CryptoError),
 
+    /// SQLite error (for direct rusqlite operations)
+    #[error("SQLite error: {0}")]
+    Sqlite(#[from] rusqlite::Error),
+
     /// Session error
     #[error("Session error: {0}")]
     Session(String),
